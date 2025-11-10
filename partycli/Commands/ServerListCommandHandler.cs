@@ -7,18 +7,19 @@ namespace partycli.Commands
 {
     public class ServerListCommandHandler
     {
-        private IApiClient ApiClient { get; }
-        private IStorageService StorageService { get; }
-        private ILogService LogService { get; }
-        private IConsoleDisplay ConsoleDisplay { get; }
-
-        public ServerListCommandHandler(IApiClient apiClient, IStorageService storageService, ILogService logService, IConsoleDisplay consoleDisplay)
+        public ServerListCommandHandler(IApiClient apiClient, IStorageService storageService, ILogService logService,
+            IConsoleDisplay consoleDisplay)
         {
             ApiClient = apiClient;
             StorageService = storageService;
             LogService = logService;
             ConsoleDisplay = consoleDisplay;
         }
+
+        private IApiClient ApiClient { get; }
+        private IStorageService StorageService { get; }
+        private ILogService LogService { get; }
+        private IConsoleDisplay ConsoleDisplay { get; }
 
         public async Task HandleAsync(bool local, bool france, bool tcp)
         {
@@ -54,39 +55,39 @@ namespace partycli.Commands
 
         private async Task HandleFranceAsync()
         {
-            var vpnQuery = new VpnServerQuery(protocol: null, countryId: VpnConstants.CountryFrance, cityId: null, regionId: null, specificServerId: null, serverGroupId: null);
+            var vpnQuery = new VpnServerQuery(null, VpnConstants.CountryFrance, null, null, null, null);
             var serverList = await ApiClient.GetAllServerByCountryListAsync(vpnQuery.CountryId.Value);
-            if (string.IsNullOrEmpty(serverList)) 
+            if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine("Error: No servers found for France.");
                 return;
             }
-            
+
             SaveAndDisplayServers(serverList);
         }
 
         private async Task HandleTcpAsync()
         {
-            var vpnQuery = new VpnServerQuery(protocol: VpnConstants.ProtocolTcp, countryId: null, cityId: null, regionId: null, specificServerId: null, serverGroupId: null);
+            var vpnQuery = new VpnServerQuery(VpnConstants.ProtocolTcp, null, null, null, null, null);
             var serverList = await ApiClient.GetAllServerByProtocolListAsync(vpnQuery.Protocol.Value);
-            if (string.IsNullOrEmpty(serverList)) 
+            if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine("Error: No servers found for TCP protocol.");
                 return;
             }
-            
+
             SaveAndDisplayServers(serverList);
         }
 
         private async Task HandleAllServersAsync()
         {
             var serverList = await ApiClient.GetAllServersListAsync();
-            if (string.IsNullOrEmpty(serverList)) 
+            if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine("Error: No servers found.");
                 return;
             }
-            
+
             SaveAndDisplayServers(serverList);
         }
 

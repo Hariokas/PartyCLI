@@ -1,18 +1,18 @@
-using partycli.Services.Interfaces;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using partycli.Services.Interfaces;
 
 namespace partycli.Services
 {
     public class ApiClient : IApiClient
     {
-        private HttpClient Client { get; }
-
         public ApiClient(HttpClient httpClient)
         {
             Client = httpClient;
         }
+
+        private HttpClient Client { get; }
 
         public async Task<string> GetAllServersListAsync()
         {

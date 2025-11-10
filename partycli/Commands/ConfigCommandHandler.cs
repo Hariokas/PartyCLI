@@ -4,14 +4,14 @@ namespace partycli.Commands
 {
     public class ConfigCommandHandler
     {
-        private IStorageService StorageService { get; }
-        private ILogService LogService { get; }
-
         public ConfigCommandHandler(IStorageService storageService, ILogService logService)
         {
             StorageService = storageService;
             LogService = logService;
         }
+
+        private IStorageService StorageService { get; }
+        private ILogService LogService { get; }
 
         public void Handle(string name, string value)
         {

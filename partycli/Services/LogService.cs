@@ -8,12 +8,12 @@ namespace partycli.Services
 {
     public class LogService : ILogService
     {
-        private IStorageService StorageService { get; }
-
         public LogService(IStorageService storageService)
         {
             StorageService = storageService;
         }
+
+        private IStorageService StorageService { get; }
 
         public void Log(string action)
         {

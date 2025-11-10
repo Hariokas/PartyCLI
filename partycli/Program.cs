@@ -19,12 +19,8 @@ namespace partycli
             }
             finally
             {
-                if (serviceProvider is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                if (serviceProvider is IDisposable disposable) disposable.Dispose();
             }
-
         }
     }
 }

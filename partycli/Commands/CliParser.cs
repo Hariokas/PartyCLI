@@ -6,18 +6,19 @@ namespace partycli.Commands
 {
     public class CliParser : ICliParser
     {
-        private ServerListCommandHandler ServerListCommandHandler { get; }
-        private ConfigCommandHandler ConfigCommandHandler { get; }
-        private IStorageService StorageService { get; }
-        private ILogService LogService { get; }
-
-        public CliParser(ServerListCommandHandler serverListCommandHandler, ConfigCommandHandler configCommandHandler, IStorageService storageService, ILogService logService)
+        public CliParser(ServerListCommandHandler serverListCommandHandler, ConfigCommandHandler configCommandHandler,
+            IStorageService storageService, ILogService logService)
         {
             ServerListCommandHandler = serverListCommandHandler;
             StorageService = storageService;
             LogService = logService;
             ConfigCommandHandler = configCommandHandler;
         }
+
+        private ServerListCommandHandler ServerListCommandHandler { get; }
+        private ConfigCommandHandler ConfigCommandHandler { get; }
+        private IStorageService StorageService { get; }
+        private ILogService LogService { get; }
 
         public RootCommand BuildRootCommand()
         {
@@ -66,7 +67,7 @@ namespace partycli.Commands
                 nameArg,
                 valueArg
             };
-            
+
             command.SetAction(parseResult =>
             {
                 var name = parseResult.GetValue(nameArg);

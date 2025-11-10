@@ -24,10 +24,7 @@ namespace partycli.Services
         public string GetValue(string name)
         {
             var settings = Settings.Default;
-            if (settings.Properties[name] != null)
-            {
-                return settings[name]?.ToString();
-            }
+            if (settings.Properties[name] != null) return settings[name]?.ToString();
 
             return "";
         }
