@@ -20,5 +20,16 @@ namespace partycli.Services
                 Console.WriteLine($"[StoreValue]: Error: Couldn't save {name}. Exception: {ex.Message}");
             }
         }
+
+        public string GetValue(string name)
+        {
+            var settings = Settings.Default;
+            if (settings.Properties[name] != null)
+            {
+                return settings[name]?.ToString();
+            }
+
+            return "";
+        }
     }
 }

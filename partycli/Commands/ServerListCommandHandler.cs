@@ -47,8 +47,9 @@ namespace partycli.Commands
 
         private void HandleLocal()
         {
-            if (!string.IsNullOrWhiteSpace(Settings.Default.serverlist))
-                ConsoleDisplay.DisplayServersInfo(Settings.Default.serverlist);
+            var serverList = StorageService.GetValue("serverlist");
+            if (!string.IsNullOrWhiteSpace(serverList))
+                ConsoleDisplay.DisplayServersInfo(serverList);
             else
                 Console.WriteLine("Error: There are no server data in local storage");
         }
