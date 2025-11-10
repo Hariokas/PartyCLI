@@ -1,18 +1,24 @@
+using partycli.Services.Interfaces;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace partycli.Services
 {
-    public static class ApiClient
+    public class ApiClient : IApiClient
     {
-        private static readonly HttpClient Client = new HttpClient();
+        private HttpClient Client { get; }
 
-        public static async Task<string> GetAllServersListAsync()
+        public ApiClient(HttpClient httpClient)
+        {
+            Client = httpClient;
+        }
+
+        public async Task<string> GetAllServersListAsync()
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, "https://api.nordvpn.com/v1/servers");
+                var request = new HttpRequestMessage(HttpMethod.Get, "v1/servers");
                 var response = await Client.SendAsync(request);
                 var responseString = await response.Content.ReadAsStringAsync();
 
@@ -25,13 +31,12 @@ namespace partycli.Services
             }
         }
 
-        public static async Task<string> GetAllServerByCountryListAsync(int countryId)
+        public async Task<string> GetAllServerByCountryListAsync(int countryId)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get,
-                    "https://api.nordvpn.com/v1/servers?filters[servers_technologies][id]=35&filters[country_id]=" +
-                    countryId);
+                    $"v1/servers?filters[servers_technologies][id]=35&filters[country_id]={countryId}");
                 var response = await Client.SendAsync(request);
                 var responseString = await response.Content.ReadAsStringAsync();
 
@@ -44,12 +49,12 @@ namespace partycli.Services
             }
         }
 
-        public static async Task<string> GetAllServerByProtocolListAsync(int vpnProtocol)
+        public async Task<string> GetAllServerByProtocolListAsync(int vpnProtocol)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get,
-                    "https://api.nordvpn.com/v1/servers?filters[servers_technologies][id]=" + vpnProtocol);
+                    $"v1/servers?filters[servers_technologies][id]={vpnProtocol}");
                 var response = await Client.SendAsync(request);
                 var responseString = await response.Content.ReadAsStringAsync();
 

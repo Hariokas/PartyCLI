@@ -3,12 +3,20 @@ using System.Threading.Tasks;
 using partycli.Constants;
 using partycli.Properties;
 using partycli.Services;
+using partycli.Services.Interfaces;
 
 namespace partycli.Commands
 {
-    public static class ServerListCommandHandler
+    public class ServerListCommandHandler
     {
-        public static async Task HandleAsync(bool local, bool france, bool tcp)
+        private IApiClient ApiClient { get; }
+
+        public ServerListCommandHandler(IApiClient apiClient)
+        {
+            ApiClient = apiClient;
+        }
+
+        public async Task HandleAsync(bool local, bool france, bool tcp)
         {
             if (local)
             {
@@ -31,7 +39,7 @@ namespace partycli.Commands
             await HandleAllServersAsync();
         }
 
-        private static void HandleLocal()
+        private void HandleLocal()
         {
             if (!string.IsNullOrWhiteSpace(Settings.Default.serverlist))
                 ConsoleDisplay.DisplayServersInfo(Settings.Default.serverlist);
@@ -39,7 +47,7 @@ namespace partycli.Commands
                 Console.WriteLine("Error: There are no server data in local storage");
         }
 
-        private static async Task HandleFranceAsync()
+        private async Task HandleFranceAsync()
         {
             var vpnQuery = new VpnServerQuery(protocol: null, countryId: VpnConstants.CountryFrance, cityId: null, regionId: null, specificServerId: null, serverGroupId: null);
             var serverList = await ApiClient.GetAllServerByCountryListAsync(vpnQuery.CountryId.Value);
@@ -52,7 +60,7 @@ namespace partycli.Commands
             SaveAndDisplayServers(serverList);
         }
 
-        private static async Task HandleTcpAsync()
+        private async Task HandleTcpAsync()
         {
             var vpnQuery = new VpnServerQuery(protocol: VpnConstants.ProtocolTcp, countryId: null, cityId: null, regionId: null, specificServerId: null, serverGroupId: null);
             var serverList = await ApiClient.GetAllServerByProtocolListAsync(vpnQuery.Protocol.Value);
@@ -65,7 +73,7 @@ namespace partycli.Commands
             SaveAndDisplayServers(serverList);
         }
 
-        private static async Task HandleAllServersAsync()
+        private async Task HandleAllServersAsync()
         {
             var serverList = await ApiClient.GetAllServersListAsync();
             if (string.IsNullOrEmpty(serverList)) 
@@ -77,7 +85,7 @@ namespace partycli.Commands
             SaveAndDisplayServers(serverList);
         }
 
-        private static void SaveAndDisplayServers(string serverList)
+        private void SaveAndDisplayServers(string serverList)
         {
             StorageService.StoreValue("serverlist", serverList, false);
             LogService.Log($"Saved new server list: {serverList}");

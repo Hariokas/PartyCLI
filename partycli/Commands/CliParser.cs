@@ -1,12 +1,19 @@
 using System.CommandLine;
-using System.Threading.Tasks;
+using partycli.Commands.Interfaces;
 using partycli.Services;
 
 namespace partycli.Commands
 {
-    public class CliParser
+    public class CliParser : ICliParser
     {
-        public static RootCommand BuildRootCommand()
+        private ServerListCommandHandler ServerListCommandHandler { get; }
+
+        public CliParser(ServerListCommandHandler serverListCommandHandler)
+        {
+            ServerListCommandHandler = serverListCommandHandler;
+        }
+
+        public RootCommand BuildRootCommand()
         {
             var root = new RootCommand("PartyCLI")
             {
@@ -17,7 +24,7 @@ namespace partycli.Commands
             return root;
         }
 
-        private static Command CreateServerListCommand()
+        private Command CreateServerListCommand()
         {
             var localOption = new Option<bool>("--local") { Description = "Display saved list of servers" };
             var franceOption = new Option<bool>("--france") { Description = "Get and save France servers" };
@@ -43,7 +50,7 @@ namespace partycli.Commands
             return command;
         }
 
-        private static Command CreateConfigCommand()
+        private Command CreateConfigCommand()
         {
             var nameArg = new Argument<string>("name") { Description = "Configuration name" };
             var valueArg = new Argument<string>("value") { Description = "Configuration value" };

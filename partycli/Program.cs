@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
-using partycli.Commands;
+using Microsoft.Extensions.DependencyInjection;
+using partycli.Commands.Interfaces;
 
 namespace partycli
 {
@@ -7,8 +9,22 @@ namespace partycli
     {
         private static async Task Main(string[] args)
         {
-            var rootCommand = CliParser.BuildRootCommand();
-            await rootCommand.Parse(args).InvokeAsync();
+            var serviceProvider = ServiceConfiguration.ConfigureServices();
+
+            try
+            {
+                var cliParser = serviceProvider.GetRequiredService<ICliParser>();
+                var rootCommand = cliParser.BuildRootCommand();
+                await rootCommand.Parse(args).InvokeAsync();
+            }
+            finally
+            {
+                if (serviceProvider is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+
         }
     }
 }
