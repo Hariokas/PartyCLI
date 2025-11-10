@@ -1,6 +1,5 @@
 using System.CommandLine;
 using partycli.Commands.Interfaces;
-using partycli.Services.Interfaces;
 
 namespace partycli.Commands
 {
