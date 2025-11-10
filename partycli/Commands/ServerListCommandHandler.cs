@@ -10,10 +10,14 @@ namespace partycli.Commands
     public class ServerListCommandHandler
     {
         private IApiClient ApiClient { get; }
+        private IStorageService StorageService { get; }
+        private ILogService LogService { get; }
 
-        public ServerListCommandHandler(IApiClient apiClient)
+        public ServerListCommandHandler(IApiClient apiClient, IStorageService storageService, ILogService logService)
         {
             ApiClient = apiClient;
+            StorageService = storageService;
+            LogService = logService;
         }
 
         public async Task HandleAsync(bool local, bool france, bool tcp)

@@ -1,11 +1,12 @@
 using System;
 using partycli.Properties;
+using partycli.Services.Interfaces;
 
 namespace partycli.Services
 {
-    public static class StorageService
+    public class StorageService : IStorageService
     {
-        public static void StoreValue(string name, string value, bool writeToConsole = true)
+        public void StoreValue(string name, string value, bool writeToConsole = true)
         {
             try
             {

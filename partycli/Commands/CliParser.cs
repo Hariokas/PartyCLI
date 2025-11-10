@@ -1,16 +1,21 @@
 using System.CommandLine;
 using partycli.Commands.Interfaces;
 using partycli.Services;
+using partycli.Services.Interfaces;
 
 namespace partycli.Commands
 {
     public class CliParser : ICliParser
     {
         private ServerListCommandHandler ServerListCommandHandler { get; }
+        private IStorageService StorageService { get; }
+        private ILogService LogService { get; }
 
-        public CliParser(ServerListCommandHandler serverListCommandHandler)
+        public CliParser(ServerListCommandHandler serverListCommandHandler, IStorageService storageService, ILogService logService)
         {
             ServerListCommandHandler = serverListCommandHandler;
+            StorageService = storageService;
+            LogService = logService;
         }
 
         public RootCommand BuildRootCommand()

@@ -23,6 +23,8 @@ namespace partycli
             });
 
             services.AddSingleton<IApiClient, ApiClient>();
+            services.AddSingleton<IStorageService, StorageService>();
+            services.AddSingleton<ILogService, LogService>();
 
             services.AddTransient<ServerListCommandHandler>();
             services.AddTransient<ICliParser, CliParser>();

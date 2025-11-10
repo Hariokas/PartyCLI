@@ -2,18 +2,27 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using partycli.Properties;
+using partycli.Services.Interfaces;
 
 namespace partycli.Services
 {
-    public static class LogService
+    public class LogService : ILogService
     {
-        public static void Log(string action)
+        private IStorageService StorageService { get; }
+
+        public LogService(IStorageService storageService)
+        {
+            StorageService = storageService;
+        }
+
+        public void Log(string action)
         {
             var newLog = new LogModel
             {
                 Action = action,
                 Time = DateTime.Now
             };
+
             List<LogModel> currentLog;
             if (!string.IsNullOrEmpty(Settings.Default.log))
             {
