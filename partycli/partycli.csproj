@@ -110,6 +110,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+<<<<<<< HEAD
+=======
+    <None Include="TODO.md" />
+>>>>>>> c971f2aebe31aa6b53e903b5ec15f44608d6a096
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
