@@ -82,8 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CliParser.cs" />
+    <Compile Include="Commands\Interfaces\ICliParser.cs" />
     <Compile Include="Commands\ServerListCommandHandler.cs" />
-    <Compile Include="Constants\VpnConstants.cs" />
+    <Compile Include="Models\Constants\VpnConstants.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\ServerModel.cs" />
     <Compile Include="Models\VpnServerQuery.cs" />
@@ -94,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ServiceConfiguration.cs" />
     <Compile Include="Services\ApiClient.cs" />
     <Compile Include="Services\ConsoleDisplay.cs" />
     <Compile Include="Services\Interfaces\IApiClient.cs" />
@@ -111,5 +113,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
