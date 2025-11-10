@@ -6,19 +6,14 @@ namespace partycli.Commands
 {
     public class CliParser : ICliParser
     {
-        public CliParser(ServerListCommandHandler serverListCommandHandler, ConfigCommandHandler configCommandHandler,
-            IStorageService storageService, ILogService logService)
+        public CliParser(ServerListCommandHandler serverListCommandHandler, ConfigCommandHandler configCommandHandler)
         {
             ServerListCommandHandler = serverListCommandHandler;
-            StorageService = storageService;
-            LogService = logService;
             ConfigCommandHandler = configCommandHandler;
         }
 
         private ServerListCommandHandler ServerListCommandHandler { get; }
         private ConfigCommandHandler ConfigCommandHandler { get; }
-        private IStorageService StorageService { get; }
-        private ILogService LogService { get; }
 
         public RootCommand BuildRootCommand()
         {
