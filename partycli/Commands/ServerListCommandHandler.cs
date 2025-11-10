@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using partycli.Constants;
-using partycli.Properties;
-using partycli.Services;
 using partycli.Services.Interfaces;
 
 namespace partycli.Commands

@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CliParser.cs" />
+    <Compile Include="Commands\ConfigCommandHandler.cs" />
     <Compile Include="Commands\Interfaces\ICliParser.cs" />
     <Compile Include="Commands\ServerListCommandHandler.cs" />
     <Compile Include="Models\Constants\VpnConstants.cs" />

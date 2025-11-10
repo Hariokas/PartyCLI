@@ -1,6 +1,5 @@
 using System.CommandLine;
 using partycli.Commands.Interfaces;
-using partycli.Services;
 using partycli.Services.Interfaces;
 
 namespace partycli.Commands
@@ -8,14 +7,16 @@ namespace partycli.Commands
     public class CliParser : ICliParser
     {
         private ServerListCommandHandler ServerListCommandHandler { get; }
+        private ConfigCommandHandler ConfigCommandHandler { get; }
         private IStorageService StorageService { get; }
         private ILogService LogService { get; }
 
-        public CliParser(ServerListCommandHandler serverListCommandHandler, IStorageService storageService, ILogService logService)
+        public CliParser(ServerListCommandHandler serverListCommandHandler, ConfigCommandHandler configCommandHandler, IStorageService storageService, ILogService logService)
         {
             ServerListCommandHandler = serverListCommandHandler;
             StorageService = storageService;
             LogService = logService;
+            ConfigCommandHandler = configCommandHandler;
         }
 
         public RootCommand BuildRootCommand()
@@ -71,9 +72,7 @@ namespace partycli.Commands
                 var name = parseResult.GetValue(nameArg);
                 var value = parseResult.GetValue(valueArg);
 
-                var processedName = name.Replace("-", string.Empty);
-                StorageService.StoreValue(processedName, value);
-                LogService.Log($"Changed {processedName} to {value}");
+                ConfigCommandHandler.Handle(name, value);
             });
 
             return command;

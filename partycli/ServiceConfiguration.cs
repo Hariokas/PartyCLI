@@ -28,6 +28,7 @@ namespace partycli
             services.AddSingleton<ILogService, LogService>();
 
             services.AddTransient<ServerListCommandHandler>();
+            services.AddTransient<ConfigCommandHandler>();
             services.AddTransient<ICliParser, CliParser>();
 
             return services.BuildServiceProvider();
