@@ -24,6 +24,7 @@ namespace partycli
 
             services.AddSingleton<IApiClient, ApiClient>();
             services.AddSingleton<IStorageService, StorageService>();
+            services.AddSingleton<IConsoleDisplay, ConsoleDisplay>();
             services.AddSingleton<ILogService, LogService>();
 
             services.AddTransient<ServerListCommandHandler>();

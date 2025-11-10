@@ -12,12 +12,14 @@ namespace partycli.Commands
         private IApiClient ApiClient { get; }
         private IStorageService StorageService { get; }
         private ILogService LogService { get; }
+        private IConsoleDisplay ConsoleDisplay { get; }
 
-        public ServerListCommandHandler(IApiClient apiClient, IStorageService storageService, ILogService logService)
+        public ServerListCommandHandler(IApiClient apiClient, IStorageService storageService, ILogService logService, IConsoleDisplay consoleDisplay)
         {
             ApiClient = apiClient;
             StorageService = storageService;
             LogService = logService;
+            ConsoleDisplay = consoleDisplay;
         }
 
         public async Task HandleAsync(bool local, bool france, bool tcp)

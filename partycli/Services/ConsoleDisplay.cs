@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using partycli.Services.Interfaces;
 
 namespace partycli.Services
 {
-    public static class ConsoleDisplay
+    public class ConsoleDisplay : IConsoleDisplay
     {
-        public static void DisplayServersInfo(string serverListString)
+        public void DisplayServersInfo(string serverListString)
         {
             var serverList = new List<ServerModel>();
             try
