@@ -22,7 +22,7 @@ namespace partycli.Commands
         private ILogService LogService { get; }
         private IConsoleDisplay ConsoleDisplay { get; }
 
-        public async Task HandleAsync(bool local, bool france, bool tcp)
+        public async Task HandleAsync(bool local, bool france, bool tcp, CancellationToken ct = default)
         {
             if (local)
             {
@@ -32,17 +32,17 @@ namespace partycli.Commands
 
             if (france)
             {
-                await HandleCountryAsync(VpnConstants.Country.France);
+                await HandleCountryAsync(VpnConstants.Country.France, ct);
                 return;
             }
 
             if (tcp)
             {
-                await HandleProtocolAsync(VpnConstants.Protocol.Tcp);
+                await HandleProtocolAsync(VpnConstants.Protocol.Tcp, ct);
                 return;
             }
 
-            await HandleAllServersAsync();
+            await HandleAllServersAsync(ct);
         }
 
         private void HandleLocal()
@@ -56,18 +56,16 @@ namespace partycli.Commands
 
         private async Task HandleCountryAsync(VpnConstants.Country country, CancellationToken ct = default)
         {
-            var countryId = (int)country;
             await FetchAndDisplayAsync(
-                () => ApiClient.GetAllServerByCountryListAsync(countryId),
+                () => ApiClient.GetAllServerByCountryListAsync(country, ct),
                 $"Error: No servers found for country '{country}'.",
                 ct);
         }
 
         private async Task HandleProtocolAsync(VpnConstants.Protocol protocol, CancellationToken ct = default)
         {
-            var protocolId = (int)protocol;
             await FetchAndDisplayAsync(
-                () => ApiClient.GetAllServerByProtocolListAsync(protocolId),
+                () => ApiClient.GetAllServerByProtocolListAsync(protocol, ct),
                 $"Error: No servers found for protocol '{protocol}'.",
                 ct);
         }
@@ -75,13 +73,13 @@ namespace partycli.Commands
         private async Task HandleAllServersAsync(CancellationToken ct = default)
         {
             await FetchAndDisplayAsync(
-                () => ApiClient.GetAllServersListAsync(),
+                () => ApiClient.GetAllServersListAsync(ct),
                 "Error: No servers found.",
                 ct);
         }
 
         private async Task FetchAndDisplayAsync(Func<Task<string>> fetchFunction, string notFoundMessage,
-            CancellationToken ct)
+            CancellationToken ct = default)
         {
             string serverList;
             try
@@ -100,6 +98,8 @@ namespace partycli.Commands
                 return;
             }
 
+            ct.ThrowIfCancellationRequested();
+            
             if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine(notFoundMessage);

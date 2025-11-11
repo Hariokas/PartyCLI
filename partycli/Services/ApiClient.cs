@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using partycli.Models.Constants;
 using partycli.Services.Interfaces;
 
 namespace partycli.Services
@@ -32,10 +33,11 @@ namespace partycli.Services
             }
         }
 
-        public async Task<string> GetAllServerByCountryListAsync(int countryId, CancellationToken ct = default)
+        public async Task<string> GetAllServerByCountryListAsync(VpnConstants.Country country, CancellationToken ct = default)
         {
             try
             {
+                var countryId = (int)country;
                 var request = new HttpRequestMessage(HttpMethod.Get,
                     $"v1/servers?filters[servers_technologies][id]=35&filters[country_id]={countryId}");
                 var response = await Client.SendAsync(request, ct);
@@ -50,12 +52,13 @@ namespace partycli.Services
             }
         }
 
-        public async Task<string> GetAllServerByProtocolListAsync(int vpnProtocol, CancellationToken ct = default)
+        public async Task<string> GetAllServerByProtocolListAsync(VpnConstants.Protocol protocol, CancellationToken ct = default)
         {
             try
             {
+                var vpnProtocolId = (int)protocol;
                 var request = new HttpRequestMessage(HttpMethod.Get,
-                    $"v1/servers?filters[servers_technologies][id]={vpnProtocol}");
+                    $"v1/servers?filters[servers_technologies][id]={vpnProtocolId}");
                 var response = await Client.SendAsync(request, ct);
                 var responseString = await response.Content.ReadAsStringAsync();
 
