@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using partycli.Models.Constants;
 using partycli.Services.Interfaces;
@@ -53,38 +54,55 @@ namespace partycli.Commands
                 Console.WriteLine("Error: There are no server data in local storage");
         }
 
-        private async Task HandleCountryAsync(VpnConstants.Country country)
+        private async Task HandleCountryAsync(VpnConstants.Country country, CancellationToken ct = default)
         {
             var countryId = (int)country;
-            var serverList = await ApiClient.GetAllServerByCountryListAsync(countryId);
-            if (string.IsNullOrEmpty(serverList))
-            {
-                Console.WriteLine("Error: No servers found for France.");
-                return;
-            }
-
-            SaveAndDisplayServers(serverList);
+            await FetchAndDisplayAsync(
+                () => ApiClient.GetAllServerByCountryListAsync(countryId),
+                $"Error: No servers found for country '{country}'.",
+                ct);
         }
 
-        private async Task HandleProtocolAsync(VpnConstants.Protocol protocol)
+        private async Task HandleProtocolAsync(VpnConstants.Protocol protocol, CancellationToken ct = default)
         {
             var protocolId = (int)protocol;
-            var serverList = await ApiClient.GetAllServerByProtocolListAsync(protocolId);
-            if (string.IsNullOrEmpty(serverList))
+            await FetchAndDisplayAsync(
+                () => ApiClient.GetAllServerByProtocolListAsync(protocolId),
+                $"Error: No servers found for protocol '{protocol}'.",
+                ct);
+        }
+
+        private async Task HandleAllServersAsync(CancellationToken ct = default)
+        {
+            await FetchAndDisplayAsync(
+                () => ApiClient.GetAllServersListAsync(),
+                "Error: No servers found.",
+                ct);
+        }
+
+        private async Task FetchAndDisplayAsync(Func<Task<string>> fetchFunction, string notFoundMessage,
+            CancellationToken ct)
+        {
+            string serverList;
+            try
             {
-                Console.WriteLine("Error: No servers found for TCP protocol.");
+                serverList = await fetchFunction();
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("[FetchAndDisplayAsync]: Operation was canceled.");
+                return;
+            }
+            catch (Exception ex)
+            {
+                LogService.Log($"Fetch error: {ex.Message}");
+                Console.WriteLine("[FetchAndDisplayAsync]: An error occurred while fetching server data.");
                 return;
             }
 
-            SaveAndDisplayServers(serverList);
-        }
-
-        private async Task HandleAllServersAsync()
-        {
-            var serverList = await ApiClient.GetAllServersListAsync();
             if (string.IsNullOrEmpty(serverList))
             {
-                Console.WriteLine("Error: No servers found.");
+                Console.WriteLine(notFoundMessage);
                 return;
             }
 

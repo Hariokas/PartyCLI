@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using partycli.Services.Interfaces;
 
@@ -14,12 +15,12 @@ namespace partycli.Services
 
         private HttpClient Client { get; }
 
-        public async Task<string> GetAllServersListAsync()
+        public async Task<string> GetAllServersListAsync(CancellationToken ct = default)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, "v1/servers");
-                var response = await Client.SendAsync(request);
+                var response = await Client.SendAsync(request, ct);
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 return responseString;
@@ -31,13 +32,13 @@ namespace partycli.Services
             }
         }
 
-        public async Task<string> GetAllServerByCountryListAsync(int countryId)
+        public async Task<string> GetAllServerByCountryListAsync(int countryId, CancellationToken ct = default)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get,
                     $"v1/servers?filters[servers_technologies][id]=35&filters[country_id]={countryId}");
-                var response = await Client.SendAsync(request);
+                var response = await Client.SendAsync(request, ct);
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 return responseString;
@@ -49,13 +50,13 @@ namespace partycli.Services
             }
         }
 
-        public async Task<string> GetAllServerByProtocolListAsync(int vpnProtocol)
+        public async Task<string> GetAllServerByProtocolListAsync(int vpnProtocol, CancellationToken ct = default)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get,
                     $"v1/servers?filters[servers_technologies][id]={vpnProtocol}");
-                var response = await Client.SendAsync(request);
+                var response = await Client.SendAsync(request, ct);
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 return responseString;
