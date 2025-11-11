@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using partycli.Constants;
+using partycli.Models.Constants;
 using partycli.Services.Interfaces;
 
 namespace partycli.Commands
@@ -31,13 +31,13 @@ namespace partycli.Commands
 
             if (france)
             {
-                await HandleFranceAsync();
+                await HandleCountryAsync(VpnConstants.Country.France);
                 return;
             }
 
             if (tcp)
             {
-                await HandleTcpAsync();
+                await HandleProtocolAsync(VpnConstants.Protocol.Tcp);
                 return;
             }
 
@@ -53,10 +53,10 @@ namespace partycli.Commands
                 Console.WriteLine("Error: There are no server data in local storage");
         }
 
-        private async Task HandleFranceAsync()
+        private async Task HandleCountryAsync(VpnConstants.Country country)
         {
-            var vpnQuery = new VpnServerQuery(null, VpnConstants.CountryFrance, null, null, null, null);
-            var serverList = await ApiClient.GetAllServerByCountryListAsync(vpnQuery.CountryId.Value);
+            var countryId = (int)country;
+            var serverList = await ApiClient.GetAllServerByCountryListAsync(countryId);
             if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine("Error: No servers found for France.");
@@ -66,10 +66,10 @@ namespace partycli.Commands
             SaveAndDisplayServers(serverList);
         }
 
-        private async Task HandleTcpAsync()
+        private async Task HandleProtocolAsync(VpnConstants.Protocol protocol)
         {
-            var vpnQuery = new VpnServerQuery(VpnConstants.ProtocolTcp, null, null, null, null, null);
-            var serverList = await ApiClient.GetAllServerByProtocolListAsync(vpnQuery.Protocol.Value);
+            var protocolId = (int)protocol;
+            var serverList = await ApiClient.GetAllServerByProtocolListAsync(protocolId);
             if (string.IsNullOrEmpty(serverList))
             {
                 Console.WriteLine("Error: No servers found for TCP protocol.");
